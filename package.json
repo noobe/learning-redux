@@ -1,0 +1,23 @@
+{
+  "name": "learning-redux",
+  "version": "1.0.0",
+  "description": "A project to explore redux library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noobe/learning-redux.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/noobe/learning-redux/issues"
+  },
+  "homepage": "https://github.com/noobe/learning-redux#readme",
+  "dependencies": {
+    "redux": "^4.2.0"
+  }
+}
