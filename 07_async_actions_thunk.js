@@ -61,22 +61,37 @@ const reducer = (state = initialState, action) => {
   But when the same data is needed from an async call, we need to create custom action creator
   which can make the API call as well.
 
-  If we make the API call from normal actionCreator method 
+  If we make the API call from normal actionCreator method we get the following error:
+  Error: Actions must be plain objects. Instead, the actual type was: 'Promise'. You may need to add middleware to your store setup to handle dispatching other values, such as 'redux-thunk' to handle dispatching functions. See https://redux.js.org/tutorials/fundamentals/part-4-store#middleware and https://redux.js.org/tutorials/fundamentals/part-6-async-logic#using-the-redux-thunk-middleware for examples.
+
+  By adding the thunk middleware the store.dispatch which normally accepts only an 
+  ACTION object, will now have the capability to accept a callback function as well.
+
+  So when we pass this new function to store.dispatch(), it will triggeer the function and
+  pass it an argument called dispatch which can be used my the passed function internally
+  to emit any ACTIONs from within.
+
+  Remember its not the action creator that gets the dispatch, but the function it 
+  returns which gets it.
 */
 
+
+
 const fetchUsers = () => {
-  // return fetchUsersSuccess([ { username: 'test', userId: 1 } ]);
-  axios.get('https://jsonplaceholder.typicode.com/users')
+  return dispatch => {
+    dispatch(fetchUsersRequest());
+    axios.get('https://jsonplaceholder.typicode.com/users/2')
     .then(response => {
       const users = response.data;
-      return fetchUsersSuccess(users);
+      dispatch(fetchUsersSuccess(users));
     })
     .catch(response => {
       const err = response.message;
-      return fetchUsersFailed(err);
+      dispatch(fetchUsersFailed(err));
     });
+  };
 };
 
-const store = Redux.createStore(reducer, Redux.applyMiddleware(logger));
+const store = Redux.createStore(reducer, Redux.applyMiddleware(logger, thunkMiddleware));
 
 store.dispatch(fetchUsers());
